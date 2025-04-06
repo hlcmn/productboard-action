@@ -1,0 +1,51 @@
+openapi: 3.0.1
+info:
+  title: Productboard Opportunity Sender
+  description: Send customer feedback opportunities via webhook to Productboard using Zapier
+  version: "1.0.0"
+servers:
+  - url: https://hooks.zapier.com/hooks/catch/4816676/2cjxmcl/
+
+paths:
+  /:
+    post:
+      operationId: sendOpportunity
+      summary: Send opportunity to Productboard
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Opportunity"
+      responses:
+        "200":
+          description: Successfully sent
+
+components:
+  schemas:
+    Opportunity:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the opportunity
+        description:
+          type: string
+          description: The opportunity statement and optionally proposed solutions
+        type:
+          type: string
+          enum: [feature, subfeature]
+          description: Productboard item type
+        parent:
+          type: object
+          required: [name, type]
+          properties:
+            name:
+              type: string
+            type:
+              type: string
+              enum: [feature]
+      required:
+        - name
+        - description
+        - type
